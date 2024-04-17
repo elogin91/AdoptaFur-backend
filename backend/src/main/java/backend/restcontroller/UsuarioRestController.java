@@ -1,19 +1,25 @@
 package backend.restcontroller;
 
-import backend.dto.MensajeDto;
-import backend.dto.UsuarioDto;
+import backend.configuration.JwtUtils;
+import backend.dto.*;
 import backend.entity.Rol;
 import backend.entity.Usuario;
+import backend.service.AutentificacionService;
 import backend.service.RolService;
 import backend.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -25,6 +31,10 @@ public class UsuarioRestController {
     RolService rolService;
     @Autowired
     PasswordEncoder encoder;
+    @Autowired
+    AuthenticationManager authenticationManager;
+    @Autowired
+    JwtUtils jwtUtils;
 
     //Alta
     @PostMapping("/alta")
@@ -81,6 +91,19 @@ public class UsuarioRestController {
             return ResponseEntity.notFound().build();
         }
     }
+    @PostMapping("/login")
+    public ResponseEntity<?> autenticandoLogin(@RequestBody PeticionDeLoginDto peticionDeLoginDto) {
 
-    //Validar log in
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(peticionDeLoginDto.getEmail(), peticionDeLoginDto.getPassword()));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtUtils.generateJwtToken(authentication);
+
+        AutentificacionService autentificacionService = (AutentificacionService) authentication.getPrincipal();
+        Rol rol = (Rol) autentificacionService.getAuthorities();
+
+        return ResponseEntity.ok(new JwtRespuestaDto(jwt, autentificacionService.getEmail(), autentificacionService.getNombre(), RolDto.from(rol)));
+    }
+
 }

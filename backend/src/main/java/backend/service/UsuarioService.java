@@ -18,13 +18,15 @@ public class UsuarioService {
     }
 
     public void alta(Usuario usuario) {
+        usuarioRepository.save(usuario);
     }
 
 
-    public Optional<Usuario> buscarUno(String idUsuario) {
-        return usuarioRepository.findById(idUsuario);
+    public Optional<Usuario> buscarUno(String email) {
+        return usuarioRepository.findById(email);
     }
 
     public void modificar(Usuario usuario) {
+         usuarioRepository.save(usuario);
     }
 }
