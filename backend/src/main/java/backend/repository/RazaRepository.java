@@ -5,6 +5,10 @@ import org.springframework.stereotype.Repository;
 
 import backend.entity.Raza;
 
+import java.util.List;
+
 @Repository
 public interface RazaRepository extends JpaRepository<Raza, Integer> {
+
+    public List<Raza> findAllByEspecie(Enum especie);
 }

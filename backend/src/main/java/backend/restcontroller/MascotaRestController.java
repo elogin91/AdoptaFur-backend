@@ -2,15 +2,12 @@ package backend.restcontroller;
 
 import java.util.Optional;
 
+import backend.entity.Usuario;
+import backend.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 import backend.dto.AltaMascotaDto;
 import backend.dto.MascotaDto;
@@ -26,6 +23,8 @@ public class MascotaRestController {
 
 	@Autowired
 	MascotaService mascotaService;
+	@Autowired
+	UsuarioService usuarioService;
 
 	@GetMapping("/")
 	public ResponseEntity<?> mostrarDisponibles(@RequestParam(required = false) Especie especie,
@@ -35,9 +34,9 @@ public class MascotaRestController {
 	}
 
 	@PostMapping("/")
-	public ResponseEntity<?> alta(AltaMascotaDto altaMascotaDto) {
-		// TODO add usuario
-		if (mascotaService.alta(altaMascotaDto, null)) {
+	public ResponseEntity<?> alta(@RequestBody AltaMascotaDto altaMascotaDto, Authentication authentication) {
+		Optional<Usuario> usuario = usuarioService.buscarUno((String)authentication.getPrincipal());
+		if (mascotaService.alta(altaMascotaDto, usuario.get())) {
 			return ResponseEntity.ok().build();
 		} else {
 			return ResponseEntity.badRequest().build();
