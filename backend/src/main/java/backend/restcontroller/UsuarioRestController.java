@@ -4,7 +4,7 @@ import backend.configuration.JwtUtils;
 import backend.dto.*;
 import backend.entity.Rol;
 import backend.entity.Usuario;
-import backend.service.AutentificacionService;
+import backend.service.UsuarioDetailsImpl;
 import backend.service.RolService;
 import backend.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -100,10 +98,10 @@ public class UsuarioRestController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
 
-        AutentificacionService autentificacionService = (AutentificacionService) authentication.getPrincipal();
-        Rol rol = (Rol) autentificacionService.getAuthorities();
+        UsuarioDetailsImpl usuarioDetails = (UsuarioDetailsImpl) authentication.getPrincipal();
+        Rol rol = (Rol) usuarioDetails.getAuthorities();
 
-        return ResponseEntity.ok(new JwtRespuestaDto(jwt, autentificacionService.getEmail(), autentificacionService.getNombre(), RolDto.from(rol)));
+        return ResponseEntity.ok(new JwtRespuestaDto(jwt, usuarioDetails.getEmail(), usuarioDetails.getNombre(), RolDto.from(rol)));
     }
 
 }

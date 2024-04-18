@@ -2,50 +2,56 @@ package backend.service;
 
 import backend.entity.Usuario;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.stereotype.Service;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
 
-@Service
+
+
 @Data
-public class AutentificacionService {
+public class UsuarioDetailsImpl implements UserDetails {
 
     private String type = "Bearer";
     private String email;
     @JsonIgnore
     private String password;
     private String nombre;
-    private GrantedAuthority authorities;
+    private Collection<? extends GrantedAuthority> authorities;
 
-    public AutentificacionService(String email, String password, String nombre,
-                           GrantedAuthority authorities) {
+    public UsuarioDetailsImpl(String email, String password, String nombre,
+                              Collection<? extends GrantedAuthority> authorities) {
         this.nombre = nombre;
         this.email = email;
         this.password = password;
         this.authorities = authorities;
     }
 
-    public static AutentificacionService build(Usuario usuario) {
-        GrantedAuthority authorities = (GrantedAuthority) usuario.getRol();
-        return new AutentificacionService(
+    public static UsuarioDetailsImpl build(Usuario usuario) {
+        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(usuario.getRol().getNombre()));
+        return new UsuarioDetailsImpl(
                 usuario.getEmail(),
                 usuario.getNombre(),
                 usuario.getPassword(),
                 authorities);
     }
 
-/*    @Override
-    public GrantedAuthority getAuthorities() {
-        return authorities;
+@Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return (Collection<? extends GrantedAuthority>) authorities;
     }
 
     @Override
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return "";
     }
 
     @Override
@@ -66,6 +72,6 @@ public class AutentificacionService {
     @Override
     public boolean isEnabled() {
         return true;
-    }*/
+    }
 
 }
