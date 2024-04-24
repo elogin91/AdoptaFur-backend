@@ -1,5 +1,30 @@
 package backend.entity;
 
-public class Solicitud {
+import jakarta.persistence.*;
+import lombok.Data;
 
+import java.time.LocalDateTime;
+
+@Data
+@Entity
+@Table(name = "solicitud")
+public class Solicitud {
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idsolicitud")
+    private Integer id;
+    @ManyToOne
+    @JoinColumn(name = "usuario")
+    private Usuario usuario;
+    @ManyToOne
+    @JoinColumn(name = "idmascota")
+    private Mascota mascota;
+    private LocalDateTime fecha;
+    private Estado estado;
+    private String tipoHogar; // TODO enum?
+    private String alergias;
+    private String familia;
+
+    public enum Estado {
+        PENDIENTE, ACEPTADA, RECHAZADA, CANCELADA
+    }
 }
