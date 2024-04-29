@@ -34,7 +34,6 @@ public class UsuarioRestController {
     @Autowired
     JwtUtils jwtUtils;
 
-    //Alta
     @PostMapping("/alta")
     public ResponseEntity<?> registerUser(@RequestBody UsuarioDto usuarioDto) {
 
@@ -52,9 +51,9 @@ public class UsuarioRestController {
         usuario.setTelefono(usuarioDto.getTelefono());
         usuario.setCumpleanio(usuarioDto.getCumpleanio());
         usuario.setProvincia(usuarioDto.getProvincia());
-        usuario.setDescription(usuarioDto.getDescription());
+        usuario.setDescription(usuarioDto.getDescripcion());
         usuario.setEnabled(true);
-        usuario.setRol(new  Rol(usuarioDto.getRolDto().getIdRol(), usuarioDto.getRolDto().getNombre()));
+        usuario.setRol(rolService.mostrarUno(usuarioDto.getIdRol()).get());
 
         usuarioService.alta(usuario);
 
@@ -82,7 +81,7 @@ public class UsuarioRestController {
             usuario.setTelefono(usuarioDto.getTelefono());
             usuario.setCumpleanio(usuarioDto.getCumpleanio());
             usuario.setProvincia(usuarioDto.getProvincia());
-            usuario.setDescription(usuarioDto.getDescription());
+            usuario.setDescription(usuarioDto.getDescripcion());
             usuarioService.modificar(usuario);
             return ResponseEntity.status(HttpStatus.OK).body("Usuario modificado");
         } else {

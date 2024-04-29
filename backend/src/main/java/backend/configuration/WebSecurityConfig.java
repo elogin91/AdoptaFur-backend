@@ -64,7 +64,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/solicitud/porMascota/**").hasAnyAuthority("Protectora")
                         .requestMatchers("/solicitud/adjudicar/**").hasAnyAuthority("Protectora")
                         .requestMatchers("/solicitud/cancelar/**").hasAnyAuthority("Protectora", "Usuario")
-                        .requestMatchers("/usuario", "/usuario/modificar").hasAnyAuthority("Protectora", "Usuario")
+                        .requestMatchers("/usuario/modificar").hasAnyAuthority("Protectora", "Usuario")
                         .requestMatchers("/usuario/login", "/usuario/alta").permitAll()
                         .anyRequest().authenticated());
 

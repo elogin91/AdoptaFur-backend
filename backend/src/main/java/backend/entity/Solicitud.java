@@ -11,9 +11,10 @@ import java.time.LocalDateTime;
 public class Solicitud {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idsolicitud")
+    @Id
     private Integer id;
     @ManyToOne
-    @JoinColumn(name = "usuario")
+    @JoinColumn(name = "email")
     private Usuario usuario;
     @ManyToOne
     @JoinColumn(name = "idmascota")

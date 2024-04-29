@@ -1,7 +1,7 @@
 package backend.restcontroller;
 
-import backend.dto.MascotaDto;
 import backend.dto.RazaDto;
+import backend.entity.Especie;
 import backend.entity.Raza;
 import backend.service.RazaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ public class RazaRestController {
     RazaService razaService;
 
     @GetMapping("/{especie}")
-    public ResponseEntity<?> mostrarRazasPorEspecie(@PathVariable Enum especie){
+    public ResponseEntity<?> mostrarRazasPorEspecie(@PathVariable Enum<Especie> especie){
 
         return ResponseEntity.ok(RazaDto.from(razaService.mostrarRazasPorEspecie(especie)));
     }

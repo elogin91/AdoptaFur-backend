@@ -1,5 +1,6 @@
 package backend.service;
 
+import backend.entity.Especie;
 import backend.entity.Raza;
 import backend.repository.RazaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ public class RazaService {
     @Autowired
     RazaRepository razaRepository;
 
-    public List<Raza> mostrarRazasPorEspecie(Enum especie) {
+    public List<Raza> mostrarRazasPorEspecie(Enum<Especie> especie) {
         return razaRepository.findAllByEspecie(especie);
     }
 

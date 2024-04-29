@@ -3,8 +3,6 @@ package backend.dto;
 import backend.entity.Rol;
 import lombok.Value;
 
-import java.util.Optional;
-
 @Value
 public class RolDto {
     private int idRol;

@@ -15,7 +15,8 @@ import java.util.List;
 @Data
 public class UsuarioDetailsImpl implements UserDetails {
 
-    private String type = "Bearer";
+	private static final long serialVersionUID = 1L;
+	private String type = "Bearer";
     private String email;
     @JsonIgnore
     private String password;
